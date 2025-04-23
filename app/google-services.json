@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "434510762949",
+    "firebase_url": "https://videoshoft-default-rtdb.firebaseio.com",
+    "project_id": "videoshoft",
+    "storage_bucket": "videoshoft.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434510762949:android:e4559bf9bfe760a20af1ac",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-VfnOueo-sovRnOMVL1NPKAV9lLNbdtM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

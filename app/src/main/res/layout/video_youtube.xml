@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray">
+
+    <!-- YouTubePlayerView để phát video từ YouTube -->
+    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/youtubePlayerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingClass" />
+
+    <ProgressBar
+        android:id="@+id/videoProgressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Phần tiêu đề và các nút điều khiển -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintVertical_bias="0.888">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="bottom"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/textVideoTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Video Shorts"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:paddingStart="9dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="5dp"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="15" />
+
+            <TextView
+                android:id="@+id/textVideoDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Video Shorts"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="5dp"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="end"
+            android:gravity="end">
+
+            <ImageView
+                android:id="@+id/imPerson"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_person_24"
+                android:gravity="end"
+                android:padding="2dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginTop="5dp" />
+
+            <ImageView
+                android:id="@+id/favorites"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_favorite_24"
+                android:gravity="end"
+                android:padding="2dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginTop="5dp" />
+
+            <ImageView
+                android:id="@+id/imShare"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_ios_share_24"
+                android:gravity="end"
+                android:padding="6dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="18dp" />
+
+            <ImageView
+                android:id="@+id/imMore"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_more_horiz_24"
+                android:gravity="end"
+                android:padding="2dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginTop="5dp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
