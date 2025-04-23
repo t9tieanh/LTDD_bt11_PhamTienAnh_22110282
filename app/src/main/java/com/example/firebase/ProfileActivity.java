@@ -1,17 +1,22 @@
 package com.example.firebase;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 
@@ -24,6 +29,8 @@ import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.example.firebase.auth.PrefManager;
 import com.example.firebase.models.User;
+import com.example.firebase.models.Video;
+import com.example.firebase.network.UploadVideoTask;
 import com.example.firebase.service.UserProfileService;
 
 import java.util.HashMap;
@@ -40,6 +47,9 @@ public class ProfileActivity extends AppCompatActivity {
     UserProfileService userService = new UserProfileService(this);
     TextView tvFullName;
     TextView tvEmail;
+
+    private static final int REQUEST_VIDEO_PICK = 2;
+    private Uri selectedVideoUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,17 +150,17 @@ public class ProfileActivity extends AppCompatActivity {
         selectImage(view);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
-            selectedImageUri = data.getData();
-            if (selectedImageUri != null) {
-                profileImage.setImageURI(selectedImageUri); // Gán ảnh đã chọn vào ImageView
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
+//            selectedImageUri = data.getData();
+//            if (selectedImageUri != null) {
+//                profileImage.setImageURI(selectedImageUri); // Gán ảnh đã chọn vào ImageView
+//            }
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -160,4 +170,68 @@ public class ProfileActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void showVideoInfoDialog(Uri videoUri) {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_video_info, null);
+        EditText etName = dialogView.findViewById(R.id.etVideoName);
+        EditText etDesc = dialogView.findViewById(R.id.etVideoDesc);
+        ImageView ivThumbnail = dialogView.findViewById(R.id.ivThumbnailPreview);
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(this, videoUri);
+        Bitmap thumbnail = retriever.getFrameAtTime(1000000); // Lấy frame ở 1s
+        ivThumbnail.setImageBitmap(thumbnail);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Thông tin video")
+                .setView(dialogView)
+                .setPositiveButton("Tải lên", (dialog, which) -> {
+                    String name = etName.getText().toString();
+                    String desc = etDesc.getText().toString();
+
+                    UploadVideoTask task = new UploadVideoTask(
+                            this,
+                            currentUser.getFullName(),
+                            videoUri,
+                            name,
+                            desc,
+                            new UploadVideoTask.OnUploadSuccessListener() {
+                                @Override
+                                public void onUploadSuccess(Video video) {
+                                    // Làm gì đó sau khi upload xong, ví dụ:
+                                    Log.d("Upload", "Video URL: " + video.getUploaderAvatarUrl());
+                                    // hoặc chuyển sang màn hình khác, update UI, v.v.
+                                }
+                            }
+                    );
+                    task.execute();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    public void selectVideo(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("video/*");
+        startActivityForResult(intent, REQUEST_VIDEO_PICK);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
+            selectedImageUri = data.getData();
+            if (selectedImageUri != null) {
+                profileImage.setImageURI(selectedImageUri);
+            }
+        }
+
+        if (requestCode == REQUEST_VIDEO_PICK && resultCode == RESULT_OK && data != null) {
+            selectedVideoUri = data.getData();
+            if (selectedVideoUri != null) {
+                showVideoInfoDialog(selectedVideoUri);
+            }
+        }
+    }
+
 }
